@@ -1,0 +1,9 @@
+--- 
+- name: "Config and Deployment Exercise"
+  hosts: 3.87.192.73
+  user: ubuntu
+  become: true
+  become_method: sudo
+  become_user: root
+  roles:
+    - setup

@@ -4,6 +4,25 @@ version: 2.1
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+commands:
+  # Exercise: Reusable Job Code
+  print_pipeline_id:
+    parameters:
+      id: 
+        type: string
+    steps:
+      - run: echo << parameters.id >>
+
+  # Exercise - Rollback
+  destroy_environment:
+    steps:
+      - run:
+          name: Destroy environment
+          # ${CIRCLE_WORKFLOW_ID} is a Built-in environment variable 
+          # ${CIRCLE_WORKFLOW_ID:0:5} takes the first 5 chars of the variable CIRCLE_CI_WORKFLOW_ID 
+          when: on_fail
+          command: |
+            aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5}
 jobs:
   say-hello:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
@@ -23,9 +42,29 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Create Cloud Formation
+          name: Create Cloud Formation (Configure Server)
           command: |
             aws cloudformation deploy --template-file template.yml --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} --region us-east-1
+      - destroy_environment
+  # Job: Config and Deployment
+  configure_infrastructure: 
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+              # You can get this ID in the section where you registered the SSH Key
+              fingerprints: ["99:b9:43:e6:db:20:de:43:cc:e5:ff:74:64:c8:9a:81"] 
+      - run:
+          name: Install Ansible
+          command: |
+            # Install Ansible
+            apk add --update ansible
+      - run:
+          name: Run Playbook and Configure server
+          command: |
+            # Configure the EC instance in AWS account 
+            ansible-playbook -i inventory.txt main.yml
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -33,4 +72,9 @@ workflows:
     jobs:
       - say-hello
       - create_cloud_formation_infrastructure
+      - configure_infrastructure
+          requires:
+            - create_cloud_formation_infrastructure
+
+
 
