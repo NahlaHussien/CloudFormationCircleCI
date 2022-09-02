@@ -1,6 +1,6 @@
 --- 
 - name: "Config and Deployment Exercise"
-  hosts: ec2-54-166-82-246.compute-1.amazonaws.com
+  hosts: 54.166.82.246
   user: ubuntu
   become: true
   become_method: sudo
