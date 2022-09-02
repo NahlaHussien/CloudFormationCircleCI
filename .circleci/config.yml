@@ -5,14 +5,13 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 commands:
-  # Exercise: Reusable Job Code
-  print_pipeline_id:
-    parameters:
-      id: 
-        type: string
-    steps:
-      - run: echo << parameters.id >>
-
+  # # Exercise: Reusable Job Code
+  # print_pipeline_id:
+  #   parameters:
+  #     id: 
+  #       type: string
+  #   steps:
+  #     - run: echo << parameters.id >>
   # Exercise - Rollback
   destroy_environment:
     steps:
@@ -36,17 +35,17 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
-  create_cloud_formation_infrastructure:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      - run:
-          name: Create Cloud Formation (Configure Server)
-          command: |
-            aws cloudformation deploy --template-file template.yml --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} --region us-east-1
-      - destroy_environment
-  # Job: Config and Deployment
+  # create_cloud_formation_infrastructure:
+  #   docker:
+  #     - image: amazon/aws-cli
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Create Cloud Formation (Configure Server)
+  #         command: |
+  #           aws cloudformation deploy --template-file template.yml --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} --region us-east-1
+  #     - destroy_environment
+  Job: Config and Deployment
   configure_infrastructure: 
     docker:
       - image: python:3.7-alpine3.11
@@ -70,11 +69,11 @@ jobs:
 workflows:
   say-hello-workflow:
     jobs:
-      - say-hello
-      - create_cloud_formation_infrastructure
-      - configure_infrastructure:
-          requires:
-            - create_cloud_formation_infrastructure
+      # - say-hello
+      # - create_cloud_formation_infrastructure
+      - configure_infrastructure
+          # requires:
+          #   - create_cloud_formation_infrastructure
 
 
 
