@@ -19,7 +19,7 @@ jobs:
           command: "echo Hello, World!"
   create_cloud_formation_infrastructure:
     docker:
-      - image: amazon/as-cli
+      - image: amazon/aws-cli
     steps:
       - checkout
       - run:
