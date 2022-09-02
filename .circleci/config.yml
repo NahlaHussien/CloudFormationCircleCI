@@ -17,10 +17,20 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
-
+  create_cloud_formation_infrastructure:
+    docker:
+      - image: amazon/as-cli
+    steps:
+      - checkout
+      - run:
+        name: Create Cloud Formation
+        command: |
+          aws cloudformation deploy --template-file template.yml --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} --regio us-east-1
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   say-hello-workflow:
     jobs:
       - say-hello
+      - create_cloud_formation_infrastructure
+
