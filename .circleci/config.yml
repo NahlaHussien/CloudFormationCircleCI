@@ -78,7 +78,7 @@ jobs:
           then
             return 0
           else
-            return q
+            return 1
           fi
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
