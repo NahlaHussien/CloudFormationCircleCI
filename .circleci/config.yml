@@ -12,7 +12,6 @@ commands:
   #       type: string
   #   steps:
   #     - run: echo << parameters.id >>
-  # Exercise - Rollback
   destroy_environment:
     steps:
       - run:
@@ -35,16 +34,16 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
-  # create_cloud_formation_infrastructure:
-  #   docker:
-  #     - image: amazon/aws-cli
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Create Cloud Formation (Configure Server)
-  #         command: |
-  #           aws cloudformation deploy --template-file template.yml --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} --region us-east-1
-  #     - destroy_environment
+  create_cloud_formation_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Create Cloud Formation (Configure Server)
+          command: |
+            aws cloudformation deploy --template-file template.yml --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} --region us-east-1 
+      - destroy_environment
   Job: Config and Deployment
   configure_infrastructure: 
     docker:
@@ -63,17 +62,18 @@ jobs:
           name: Run Playbook and Configure server
           command: |
             # Configure the EC instance in AWS account 
-            ansible-playbook -i inventory.txt main.yml
+            aws ec describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> inventory.txt --region us-east-1 
+            ansible-playbook -i inventory.txt main.yml --private-key new_i.pem
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  create-deploy-infrastructure-workflow:
     jobs:
-      # - say-hello
-      # - create_cloud_formation_infrastructure
-      - configure_infrastructure
-          # requires:
-          #   - create_cloud_formation_infrastructure
+      # # - say-hello
+      # # - create_cloud_formation_infrastructure
+      # - configure_infrastructure
+      #     # requires:
+      #     #   - create_cloud_formation_infrastructure
 
 
 

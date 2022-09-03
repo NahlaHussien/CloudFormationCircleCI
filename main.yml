@@ -1,7 +1,7 @@
 --- 
-- name: "Config and Deployment Exercise"
-  hosts: 54.166.82.246
-  user: ubuntu
+- name: Config and Deployment Exercise
+  hosts: all
+  user: admin
   become: true
   become_method: sudo
   become_user: root
