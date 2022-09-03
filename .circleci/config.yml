@@ -69,11 +69,11 @@ jobs:
 workflows:
   create-deploy-infrastructure-workflow:
     jobs:
-      # # - say-hello
-      # # - create_cloud_formation_infrastructure
-      # - configure_infrastructure
-      #     # requires:
-      #     #   - create_cloud_formation_infrastructure
+      - say-hello
+      - create_cloud_formation_infrastructure
+      - configure_infrastructure
+          requires:
+            - create_cloud_formation_infrastructure
 
 
 
