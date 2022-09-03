@@ -62,8 +62,8 @@ jobs:
           name: Run Playbook and Configure server
           command: |
             # Configure the EC instance in AWS account 
-            apt update
-            apt upgrade
+            apK update
+            apK upgrade
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             ./aws/install
