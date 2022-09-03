@@ -62,7 +62,7 @@ jobs:
           name: Run Playbook and Configure server
           command: |
             # Configure the EC instance in AWS account 
-            aws ec describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> inventory.txt --region us-east-1 
+            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> inventory.txt --region us-east-1 
             ansible-playbook -i inventory.txt main.yml --private-key new_i.pem
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
