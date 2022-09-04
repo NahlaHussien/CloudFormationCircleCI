@@ -89,7 +89,7 @@ jobs:
           #     return 1
           #   fi
           # name: smoke test
-          command: return 1 
+            command: return 1 
       - destroy_environment
         when: on_fail        
 # Invoke jobs via workflows
