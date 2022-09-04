@@ -69,8 +69,8 @@ jobs:
             # curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             # unzip awscliv2.zip
             # aws --version
-            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> inventory.txt --region us-east-1
-            ansible-playbook -i inventory.txt main.yml --private-key new_i.pem
+            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> D:\AWS\FWD\CloudFormation\CloudFormationCircleCI\inventory.txt --region us-east-1
+            ansible-playbook -i inventory.txt main.yml --private-key D:\AWS\FWD\CloudFormation\CloudFormationCircleCI\new_i.pem
   smoke_test:
     docker:
       - image: python:3.7-alpine3.11
