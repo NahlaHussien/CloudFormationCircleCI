@@ -33,7 +33,7 @@ jobs:
       - checkout
       - run:
           name: "Say hello"
-          command: "echo Hello, World !"
+          command: "echo Hello, World!!!"
   create_cloud_formation_infrastructure:
     docker:
       - image: amazon/aws-cli
